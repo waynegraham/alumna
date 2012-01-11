@@ -70,7 +70,7 @@ if (!$submitsearch)
 
 {
 $connection=mysql_connect("localhost", "alumnaAdmin", "alumna%adm%orion");
-mysql_select_db("eos8d_alumna", $connection);
+mysql_select_db("alumna", $connection);
 $prog1_query="select distinct school from iph order by school";
 $prog2_query="select distinct school2 from iph order by school2";
 // $prog3_query="select distinct school3 from iph order by school3";

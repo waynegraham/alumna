@@ -297,7 +297,7 @@ $query .= " and ";
 
 // if it hasn't, then the query has not yet been run
 $connection=mysql_connect("localhost", "alumnaAdmin", "alumna%adm%orion");
-mysql_select_db("eos8d_alumna", $connection);
+mysql_select_db("alumna", $connection);
 $result_accNum = mysql_query($query, $connection);
 // $result2 = mysql_query($query2, $connection);
 $query2 = "select * from iph where accessionNumber = ";
@@ -618,7 +618,7 @@ elseif ($rec_num)
 
 {
 $connection=mysql_connect("localhost", "alumnaAdmin", "alumna%adm%orion");
-mysql_select_db("eos8d_alumna", $connection);
+mysql_select_db("alumna", $connection);
 $query1="select * from iph where accessionNumber = " . $rec_num;
 
 $result1 = mysql_query($query1, $connection);
