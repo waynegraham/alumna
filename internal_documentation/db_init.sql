@@ -12,6 +12,10 @@ GRANT SELECT ON alumna.* TO 'leffler'@'localhost';
 
 USE alumna;
 
+--
+-- First the IPH table.
+--
+
 SOURCE ./iph_table.sql;
 
 -- If you have trouble with this command ("The used command is not allowed in
@@ -29,4 +33,18 @@ SELECT 'Imported with lastName';
 SELECT COUNT(*) FROM iph WHERE lastname IS NOT NULL;
 SELECT 'Imported without lastName';
 SELECT COUNT(*) FROM iph WHERE lastname IS NULL;
+
+--
+-- Now the OpenResponses table
+--
+
+CREATE TABLE openresponses (
+    openreponseid INTEGER PRIMARY KEY,
+    accessionnumber INT,
+    questionnumber INT,
+    response TEXT,
+    CONSTRAINT FOREIGN KEY (accessionnumber) REFERENCES iph (accessionNumber)
+);
+CREATE INDEX openresponses_idx
+    ON openresponses (openreponseid, accessionnumber, questionnumber);
 
