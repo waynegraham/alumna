@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
   include("header.html");
 ?>
 
@@ -36,3 +37,10 @@ In 1995, on the 100th anniversary of the Rotunda Fire, all known living resident
 </p>
 
  <? include("footer.html") ?>
+=======
+
+require_once('./alumna.php');
+
+echo $mustache->render($templates['index'], array());
+
+>>>>>>> a560a59d7572b1f6fc265b8a7839bcdae751590f
