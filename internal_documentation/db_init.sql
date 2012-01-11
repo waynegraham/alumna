@@ -42,9 +42,26 @@ CREATE TABLE openresponses (
     openreponseid INTEGER PRIMARY KEY,
     accessionnumber INT,
     questionnumber INT,
-    response TEXT,
-    CONSTRAINT FOREIGN KEY (accessionnumber) REFERENCES iph (accessionNumber)
+    response TEXT 
+    -- I wanted to add this, but the data doesn't conform to it....
+    -- , CONSTRAINT FOREIGN KEY (accessionnumber) REFERENCES iph (accessionNumber)
 );
 CREATE INDEX openresponses_idx
     ON openresponses (openreponseid, accessionnumber, questionnumber);
+
+-- If you have trouble with this command ("The used command is not allowed in
+-- this MySQL version"), run it with "mysql --local_infile=1 ..."
+LOAD DATA LOCAL INFILE 'OpenResponses Final.txt'
+    INTO TABLE openresponses
+    FIELDS TERMINATED BY '|'
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES
+    ;
+
+-- More sanity, such as it is.
+SELECT 'Imported with responses.';
+SELECT COUNT(*) FROM openresponses WHERE response IS NOT NULL;
+SELECT 'Imported without responses.';
+SELECT COUNT(*) FROM openresponses WHERE response IS NULL;
 
