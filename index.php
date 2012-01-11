@@ -1,8 +1,28 @@
 <?php
 
+/**
+ * Project: UVa Women Alumna
+ */
 
-include("header.html") ?>
+define('ALUMNA_DIR', '.');
+define('SMARTY_DIR', 'libs/Smarty/');
 
+require_once(ALUMNA_DIR . 'libs/alumna_setup.php');
+
+$alumna = new Alumna;
+
+$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'home';
+
+switch($_action) {
+  case 'home':
+  default:
+    $alumna->displayInfo();
+    break;
+}
+
+?>
+
+<!--
 
 <h1>
 Institute for Public History
@@ -34,5 +54,5 @@ In 1995, on the 100th anniversary of the Rotunda Fire, all known living resident
 <p>
 	To enter the database, click <a href="ROiph.php">here</a>.
 </p>
-
- <? include("footer.html") ?>
+-->
+ <? //include("footer.html") ?>
