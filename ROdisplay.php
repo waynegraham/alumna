@@ -386,22 +386,7 @@ else
 
 <thead>
 <tr>
-
-<th colspan="<? echo count($dis_field) + 2; ?>">
-
-
-</th>
-
-
-</tr>
-
-
-<tr>
-
-
 <th>#</th>
-
-
 <th>Accession Number</th>
 
 <?

@@ -1,13 +1,5 @@
 <?php include("header.html"); ?>
 
-<nav>
-    <ul>
-        <li><a href="ROiph.php">Enter the database</a></li>
-        <li><a href="http://www.virginia.edu/100yearslawn/">100 Years on the Lawn</a></li>
-        <li><a href="http://www.virginia.edu/publichistory/uhistproj.html">University History Project</a></li>
-    </ul>
-</nav>
-
 <p>In 1995, on the 100th anniversary of the Rotunda Fire, all known living
 residents of the Lawn were contacted and asked to contribute their
 recollections and memorabilia of their experiences at the University of
