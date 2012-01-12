@@ -22,8 +22,11 @@ function finfo($name, $label) {
  * it's added to the values set for that field.
  **/
 function add_row_values(&$fields, $row) {
-    $row_keys = array_keys($ow);
+    $row_keys = array_keys($row);
     foreach ($fields as $f => $info) {
+        if (!isset($row[$f])) {
+            continue;
+        }
         $value = $row[$f];
         if (isset($value) && $value != null) {
             $info['values'][$value] = 1;
