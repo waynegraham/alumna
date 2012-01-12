@@ -5,12 +5,48 @@ require_once './alumna.php';
 $connection=mysql_connect("localhost", "alumnaAdmin", "alumna%adm%orion");
 mysql_select_db("alumna", $connection);
 
+/**
+ * This creates an initial field info array. It contains the name, the label, 
+ * and an empty array for the set of values.
+ **/
 function finfo($name, $label) {
     return array(
         'name'   => $name,
         'label'  => $label,
         'values' => array()
     );
+}
+
+/**
+ * This adds the row of data values into the $fields array. For each value, 
+ * it's added to the values set for that field.
+ **/
+function add_row_values(&$fields, $row) {
+    $row_keys = array_keys($ow);
+    foreach ($fields as $f => $info) {
+        $value = $row[$f];
+        if (isset($value) && $value != null) {
+            $info['values'][$value] = 1;
+        }
+        $fields[$f] = $info;
+    }
+}
+
+/**
+ * This converts an array/set into an array/list of sorted arrays with values 
+ * keys. Yuck. HOF would be nice here.
+ **/
+function set_to_values_list($set) {
+    $values = array();
+
+    $keys = array_keys($set);
+    sort($keys);
+
+    foreach ($keys as $k) {
+        array_push($values, array('value' => $k));
+    }
+
+    return $values;
 }
 
 $sql = 'SELECT * FROM iph';
@@ -27,42 +63,20 @@ $fields = array(
     'directlyFromHS'   => finfo('directfromhs', 'Directly from high school')
 );
 
-$log = '';
-
 // Set the initial set/array for each field. Populate it from the database.
 $query = mysql_query($sql, $connection);
 while ($row = mysql_fetch_assoc($query)) {
-    $row_keys = array_keys($row);
-    foreach ($fields as $f => $info) {
-        $value = $row[$f];
-        if (isset($value) && $value != null) {
-            $info['values'][$value] = 1;
-        }
-        $fields[$f] = $info;
-    }
+    add_row_values($fields, $row);
 }
-$log .= print_r($fields, true) . "\n";
 
 // Now convert the sets into sorted lists.
 foreach ($fields as $f => $info) {
-    $keys = array_keys($info['values']);
-    sort($keys);
-    $info['values'] = array();
-    foreach ($keys as $k) {
-        array_push($info['values'], array('value' => $k));
-    }
+    $info['values'] = set_to_values_list($info['values']);
     $fields[$f] = $info;
 }
-$log .= print_r($fields, true) . "\n";
 
 // Now add in the free-form text fields.
 $fields['hometown'] = array('name' => 'homet', 'label' => 'Hometown');
-
-$fields['debug'] = array(
-    # array('key' => 'log',      'value' => $log),
-    # array('key' => 'fields',   'value' => print_r($fields, true)),
-    array('key' => 'row_keys', 'value' => print_r($row_keys, true))
-);
 
 echo $mustache->render($templates['search'], $fields,
     array(
