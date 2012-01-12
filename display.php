@@ -5,13 +5,13 @@ require_once './alumna.php';
 $connection=mysql_connect("localhost", "alumnaAdmin", "alumna%adm%orion");
 mysql_select_db("alumna", $connection);
 
-$rec_num      = $_GET['rec_num'];
-$rec_num2     = isset($_GET['rec_num2'])  ? $_GET['rec_num2']  : '';
-$remod        = isset($_GET['remod'])     ? $_GET['remod']     : '';
-$submitsearch = $_GET['submitsearch'];
-$next_page    = isset($_GET['next_page']) ? $_GET['next_page'] : '';
-$prev_page    = isset($_GET['prev_page']) ? $_GET['prev_page'] : '';
-$num_page     = isset($_GET['num_page'])  ? $_GET['num_page']  : '';
+$rec_num      = isset($_GET['rec_num'])      ? $_GET['rec_num']      : '';
+$rec_num2     = isset($_GET['rec_num2'])     ? $_GET['rec_num2']     : '';
+$remod        = isset($_GET['remod'])        ? $_GET['remod']        : '';
+$submitsearch = isset($_GET['submitsearch']) ? $_GET['submitsearch'] : '';
+$next_page    = isset($_GET['next_page'])    ? $_GET['next_page']    : '';
+$prev_page    = isset($_GET['prev_page'])    ? $_GET['prev_page']    : '';
+$num_page     = isset($_GET['num_page'])     ? $_GET['num_page']     : '';
 
 $rows_page    = 20;
 $partials = array(
@@ -131,59 +131,58 @@ if (isset($_GET['keyword']) && $_GET['keyword']) {
 if (!$rec_num) {
 
     // They've submitted a search query.
-    if ($submitsearch) {
-        $display_fields = array(
-            'school'             => 'First UVa program',
-            'school2'            => 'Second UVa program',
-            'school3'            => 'Thrid UVa program',
-            'hometown'           => 'Home town',
-            'homestate'          => 'Home state',
-            'entereduva'         => 'Year entered UVa',
-            'leftuva'            => 'Year left UVa',
-            'htclassification'   => 'Home town classification',
-            'highschool'         => 'High school type',
-            'coedhighschool'     => 'Coed High school?',
-            'directlyFromHS'     => 'Directly from high school',
-            'spouseAtUVA'        => 'Spouse at UVa'
-        );
+    $display_fields = array(
+        'school'             => 'First UVa program',
+        'school2'            => 'Second UVa program',
+        'school3'            => 'Thrid UVa program',
+        'hometown'           => 'Home town',
+        'homestate'          => 'Home state',
+        'entereduva'         => 'Year entered UVa',
+        'leftuva'            => 'Year left UVa',
+        'htclassification'   => 'Home town classification',
+        'highschool'         => 'High school type',
+        'coedhighschool'     => 'Coed High school?',
+        'directlyFromHS'     => 'Directly from high school',
+        'spouseAtUVA'        => 'Spouse at UVa'
+    );
 
-        $display_labels = array(
-            array('label' => 'Accession Number'),
-            array('label' => 'First UVa program'),
-            array('label' => 'Second UVa program'),
-            array('label' => 'Thrid UVa program'),
-            array('label' => 'Home town'),
-            array('label' => 'Home state'),
-            array('label' => 'Year entered UVa'),
-            array('label' => 'Year left UVa'),
-            array('label' => 'Home town classification'),
-            array('label' => 'High school type'),
-            array('label' => 'Coed High school?'),
-            array('label' => 'Directly from high school'),
-            array('label' => 'Spouse at UVa')
-        );
+    $display_labels = array(
+        array('label' => 'Accession Number'),
+        array('label' => 'First UVa program'),
+        array('label' => 'Second UVa program'),
+        array('label' => 'Thrid UVa program'),
+        array('label' => 'Home town'),
+        array('label' => 'Home state'),
+        array('label' => 'Year entered UVa'),
+        array('label' => 'Year left UVa'),
+        array('label' => 'Home town classification'),
+        array('label' => 'High school type'),
+        array('label' => 'Coed High school?'),
+        array('label' => 'Directly from high school'),
+        array('label' => 'Spouse at UVa')
+    );
 
-        $query           = '';
-        $template_params = array();
+    $query           = '';
+    $template_params = array();
 
-        // Build the query.
-        $i = 0;
-        $query .= "SELECT accessionNumber FROM iph WHERE ";
-        foreach ($params as $column => $value) {
-            $op = $i > 0 ? 'AND' : '';
-            $query .= " $op $column='$value'";
-            $i++;
-        }
+    // Build the query.
+    $i = 0;
+    $query .= "SELECT accessionNumber FROM iph WHERE ";
+    foreach ($params as $column => $value) {
+        $op = $i > 0 ? 'AND' : '';
+        $query .= " $op $column='$value'";
+        $i++;
+    }
 
-        // Handle keywords by wrapping the query so far and adding the full 
-        // text search to it, as well as the full text search on the responses.
-        if (isset($current_query['keyword'])) {
-            $op      = $i > 0 ? 'AND' : '';
-            $keyword = $current_query['keyword'];
-            $value   = mysql_real_escape_string($keyword);
+    // Handle keywords by wrapping the query so far and adding the full 
+    // text search to it, as well as the full text search on the responses.
+    if (isset($current_query['keyword'])) {
+        $op      = $i > 0 ? 'AND' : '';
+        $keyword = $current_query['keyword'];
+        $value   = mysql_real_escape_string($keyword);
 
-            $query = "($query $op ";
-            $query .= <<<EOQ
+        $query = "($query $op ";
+        $query .= <<<EOQ
                 MATCH (
                     lastName, firstName, address, city, state, 
                     zip, phoneNumber, email, canwecontact, contact2, school, 
@@ -222,87 +221,86 @@ if (!$rec_num) {
                     currmarry, agerange, employstatus, commenton46, addcomments
                 ) AGAINST (
 EOQ;
-            $query .= "'$value' IN BOOLEAN MODE)) UNION (SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)) ORDER BY accessionNumber";
-        }
-
-        // All that was just to get the accessionNumbers returned. Now let's 
-        // use that to get all the fields and the count. ($countq has to be 
-        // done first, because we're getting ready to clobber $query.)
-        $countq = "SELECT COUNT(*) FROM iph WHERE accessionNumber IN ($query);";
-        $query  = "SELECT * FROM iph WHERE accessionNumber IN ($query) ORDER BY accessionNumber";
-
-        // Now we need to add pagination....
-        if (!$num_page) {
-            $num_page = 1;
-        }
-        if ($next_page) {
-            $num_page++;
-        }
-        if ($prev_page) {
-            $num_page--;
-        }
-        array_push($current_form, array(
-            'field' => 'num_page',
-            'value' => $num_page
-        ));
-
-        $offset = ($num_page - 1) * $rows_page;
-        $limit  = $rows_page;
-        $query .= " LIMIT $limit OFFSET $offset;";
-
-        // Get the count of the full, non-paginated results.
-        error_log("COUNT QUERY: $countq");
-        $result = mysql_query($countq, $connection);
-        $row = mysql_fetch_row($result);
-        $count = $row[0];
-        error_log("count = $count");
-
-        // Get the page of results. Build the data structures for the template.
-        $results = array();
-        error_log("SEARCH QUERY: $query");
-        $result = mysql_query($query, $connection);
-        error_log("RESULTS: " . print_r($result, true));
-        if ($result) {
-            $current_query_str = http_build_query($current_query, '', '&amp;');
-            $n = 1;
-            while ($row = mysql_fetch_assoc($result)) {
-                $values = array();
-                foreach ($display_fields as $column => $label) {
-                    array_push($values, array(
-                        'value'  => $row[$column]
-                    ));
-                }
-
-                $meta = array(
-                    'n'      => $n,
-                    'id'     => $row['accessionNumber'],
-                    'query'  => $current_query_str,
-                    'values' => $values
-                );
-
-                array_push($results, $meta);
-                $n++;
-            }
-        }
-
-        $template_params['count']     = $count;
-        $template_params['results']   = $results;
-        $template_params['labels']    = $display_labels;
-        $template_params['current']   = $current_form;
-        $template_params['page_size'] = $rows_page;
-        $template_params['prev']      = (
-            $num_page > 1 && $count > $rows_page
-        );
-        $template_params['next']      = (
-            $num_page < ($count / $rows_page) - 1 && $count > $rows_page
-        );
-        $template_params['paging']    = (
-            $template_params['prev'] || $template_params['next']
-        );
-
-        $template_name            = 'browse';
-        $partials['searchresult'] = $templates['searchresult'];
+        $query .= "'$value' IN BOOLEAN MODE)) UNION (SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)) ORDER BY accessionNumber";
     }
+
+    // All that was just to get the accessionNumbers returned. Now let's 
+    // use that to get all the fields and the count. ($countq has to be 
+    // done first, because we're getting ready to clobber $query.)
+    $countq = "SELECT COUNT(*) FROM iph WHERE accessionNumber IN ($query);";
+    $query  = "SELECT * FROM iph WHERE accessionNumber IN ($query) ORDER BY accessionNumber";
+
+    // Now we need to add pagination....
+    if (!$num_page) {
+        $num_page = 1;
+    }
+    if ($next_page) {
+        $num_page++;
+    }
+    if ($prev_page) {
+        $num_page--;
+    }
+    array_push($current_form, array(
+        'field' => 'num_page',
+        'value' => $num_page
+    ));
+
+    $offset = ($num_page - 1) * $rows_page;
+    $limit  = $rows_page;
+    $query .= " LIMIT $limit OFFSET $offset;";
+
+    // Get the count of the full, non-paginated results.
+    error_log("COUNT QUERY: $countq");
+    $result = mysql_query($countq, $connection);
+    $row = mysql_fetch_row($result);
+    $count = $row[0];
+    error_log("count = $count");
+
+    // Get the page of results. Build the data structures for the template.
+    $results = array();
+    error_log("SEARCH QUERY: $query");
+    $result = mysql_query($query, $connection);
+    error_log("RESULTS: " . print_r($result, true));
+    if ($result) {
+        $current_query_str = http_build_query($current_query, '', '&amp;');
+        $n = 1;
+        while ($row = mysql_fetch_assoc($result)) {
+            $values = array();
+            foreach ($display_fields as $column => $label) {
+                array_push($values, array(
+                    'value'  => $row[$column]
+                ));
+            }
+
+            $meta = array(
+                'n'      => $n,
+                'id'     => $row['accessionNumber'],
+                'query'  => $current_query_str,
+                'values' => $values
+            );
+
+            array_push($results, $meta);
+            $n++;
+        }
+    }
+
+    $template_params['count']     = $count;
+    $template_params['results']   = $results;
+    $template_params['labels']    = $display_labels;
+    $template_params['current']   = $current_form;
+    $template_params['page_size'] = $rows_page;
+    $template_params['prev']      = (
+        $num_page > 1 && $count > $rows_page
+    );
+    $template_params['next']      = (
+        $num_page < ($count / $rows_page) - 1 && $count > $rows_page
+    );
+    $template_params['paging']    = (
+        $template_params['prev'] || $template_params['next']
+    );
+
+    $template_name            = 'browse';
+    $partials['searchresult'] = $templates['searchresult'];
 
 } else {
     // This is the case if they want to look at a single record.
@@ -477,11 +475,18 @@ EOQ;
         make_resp_output_info($responses, 'c147', 47, "Additional comments", true, true, 62, 3)
     );
 
-    $current_form['num_page']   = $num_page;
-    $current_form['rec_num2']   = $record['accessionNumber'];
+    array_push($current_form, array(
+        'field' => 'num_page',
+        'value' => $num_page
+    ));
+    array_push($current_form, array(
+        'field' => 'rec_num2',
+        'value' => $record['accessionNumber']
+    ));
 
     $template_params['id']      = $record['accessionNumber'];
     $template_params['fields']  = $display_fields;
+    error_log('(B) current_form = ' . print_r($current_form, true));
     $template_params['current'] = $current_form;
     $template_name              = 'display';
     $partials['displayfield']   = $templates['displayfield'];
