@@ -3,7 +3,7 @@ set :default_stage, "staging"
 require 'capistrano/ext/multistage'
 
 
-set :application, "aluma"
+set :application, "alumna"
 set :repository,  "https://subversion.lib.virginia.edu/repos/alumna/trunk"
 
 set :deploy_to, "/usr/local/projects/#{application}/"
