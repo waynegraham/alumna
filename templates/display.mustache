@@ -1,0 +1,22 @@
+{{> header }}
+
+<table border='1'>
+    <tr>
+        <td colspan='8'>
+            <h3>Record Accession Number: {{id}}</h3>
+        </td>
+    </tr>
+    {{#fields}} {{> displayfield }} {{/fields}}
+    <form method="GET" action="display.php">
+        <tr>
+            <td colspan='6'>
+                {{> hidden_form }}
+                <input type='submit' name='remod' value='Back to search results'>
+                <h3> OR </h3>
+                <a href="search.php">Input new search criteria</a>
+            </td>
+        </tr>
+    </form>
+</table>
+
+{{> footer }}

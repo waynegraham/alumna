@@ -1,3 +1,58 @@
 {{> header }}
 
+<form method="GET" action="display.php">
+    <h2>Women's Survey Database</h2>
+    <h3>Input search values</h3>
+
+    <table>
+        <tr>
+            {{#school}}           {{> queryselect }} {{/school}}
+            {{#school2}}          {{> queryselect }} {{/school2}}
+            {{#hometown}}         {{> querytext }}   {{/hometown}}
+        </tr>
+        <tr>
+            {{#homestate}}        {{> queryselect }} {{/homestate}}
+            {{#htclassification}} {{> queryselect }} {{/htclassification}}
+            {{#entereduva}}       {{> queryselect }} {{/entereduva}}
+        </tr>
+        <tr>
+            {{#leftuva}}          {{> queryselect }} {{/leftuva}}
+            {{#spouseAtUVA}}      {{> queryselect }} {{/spouseAtUVA}}
+            {{#highschool}}       {{> queryselect }} {{/highschool}}
+        </tr>
+        <tr>
+            {{#coedhighschool}}   {{> queryselect }} {{/coedhighschool}}
+            {{#directlyFromHS}}   {{> queryselect }} {{/directlyFromHS}}
+        </tr>
+        <tr>
+            <td>Keyword search on all fields*</td>
+            <td colspan='3'><input type='text' name='keyword' size='60' /><td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan='6'></td>
+        </tr>
+        <tr>
+            <td colspan='6'>
+                <center>
+                    <input type='submit' name='submitsearch' value='Search' />
+                    <input type='reset' name='reset button' value='Reset search criteria' />
+                </center>
+            </td>
+        </tr>
+    </table>
+
+</form>
+
+*A keyword search will ignore the searches on the other categories.<br>
+Therefore, any keyword search combined with a search on another category<br>
+will return all records that match the keyword search, not just those that<br>
+match the keyword search and the search criteria for the other categories.<br>
+*Also, this is a boolean search.  It will default to an "or" search.<br>
+That means that if you search on two words, it will return all rows that have <I>either</i> of the two words, not both.<br>
+If you want to do an "and" search, type the + sign before each word.  So, typing "+africa +asia" would search<br>
+for rows where the words "africa" and "asia" both appear somewhere in the row.  The search is not case sensitive.<br>
+For more information on doing a boolean search, click <a href="http://www.mysql.org/doc/refman/4.1/en/fulltext-boolean.html">here</a>.
+
 {{> footer }}
