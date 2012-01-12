@@ -9,11 +9,4 @@ define('TEMPLATE_DIR', ALUMNA_DIR . '/templates');
 
 require_once ALUMNA_DIR . '/libs/Mustache.php';
 require_once ALUMNA_DIR . '/libs/MustacheLoader.php';
-
-$templates = new MustacheLoader(TEMPLATE_DIR);
-$partials  = array(
-    'header' => $templates['header'],
-    'footer' => $templates['footer']
-);
-$mustache  = new Mustache(null, null, $partials);
-
+require_once ALUMNA_DIR . '/libs/limonade.php';
