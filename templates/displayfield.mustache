@@ -1,0 +1,13 @@
+{{#alpha}} <tr> {{/alpha}}
+    <td width='60'> {{label}} </td>
+    {{#rows}}
+    <td{{#colspan}} colspan='{{colspan}}'{{/colspan}}>
+        <textarea name="{{field}}" rows="{{rows}}" cols="{{cols}}">{{value}}</textarea>
+    </td>
+    {{/rows}}
+    {{^rows}}
+    <td{{#colspan}} colspan='{{colspan}}'{{/colspan}}{{^colspan}} width='60'{{/colspan}}>
+        <input type='text' size='{{textsize}}' name="{{field}}" value="{{value}}" />
+    </td>
+    {{/rows}}
+{{#omega}} </tr> {{/omega}}
