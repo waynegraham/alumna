@@ -42,6 +42,20 @@ class AlumnaController
     }
 
     /**
+     * This closes any resources opened while generating the page.
+     *
+     * @return void
+     * @author Eric Rochester <err8n@virginia.edu>
+     **/
+    protected function _close()
+    {
+        if ($this->__db != null) {
+            $this->__db->close();
+            $this->__db = null;
+        }
+    }
+
+    /*
      * This returns a partials array for the listed partials.
      *
      * @param $names array This is a list of the partial names.
@@ -102,7 +116,9 @@ class AlumnaController
     public function index()
     {
         error_log('CONTROLLER: index');
-        return $this->_render('index', array());
+        $index = $this->render('index', array());
+        $this->_close();
+        return $index;
     }
 
     /**
@@ -114,7 +130,9 @@ class AlumnaController
     {
         error_log('CONTROLLER: search');
         $helper = new SearchHelper($this);
-        return $helper->render();
+        $search = $helper->render();
+        $this->_close();
+        return $search;
     }
 
     /**
