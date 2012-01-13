@@ -1,39 +1,22 @@
 {{> header }}
 
-{{#count}}
-<h3>Your query returned {{count}} records<br />
-    Choose a record to view</h3>
-<form method="GET" action="display.php">
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th>#</th>
-                {{#labels}} <th>{{label}}</th> {{/labels}}
-            </tr>
-        </thead>
-        <tbody>
-            {{#results}} {{> searchresult }} {{/results}}
-        </tbody>
-        {{> hidden_form }}
+<table border='1'>
+    <tr>
+        <td colspan='8'>
+            <h3>Record Accession Number: {{id}}</h3>
+        </td>
+    </tr>
+    {{#fields}} {{> displayfield }} {{/fields}}
+    <form method="GET" action="display.php">
         <tr>
-            <td colspan='15'>
-                {{#prev}}
-                <input type='submit' name='prev_page' value='View previous {{page_size}} summaries' />
-                {{/prev}}
-                {{#next}}
-                <input type='submit' name='next_page' value='View next {{page_size}} summaries' />
-                {{/next}}
-                {{#paging}}
-                <br />OR</br />
-                {{/paging}}
+            <td colspan='6'>
+                {{> hidden_form }}
+                <input type='submit' name='remod' value='Back to search results'>
+                <h3> OR </h3>
                 <a href="search.php">Input new search criteria</a>
             </td>
         </tr>
-    </table>
-</form>
-{{/count}}
-{{^count}}
-<h3>Your query returned 0 results.</h3>
-{{/count}}
+    </form>
+</table>
 
 {{> footer }}
