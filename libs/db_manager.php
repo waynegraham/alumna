@@ -39,4 +39,9 @@ class DatabaseManager
   {
     return mysql_close($this->conn);
   }
+
+  function escape($value)
+  {
+    return mysql_real_escape_string($value);
+  }
 }

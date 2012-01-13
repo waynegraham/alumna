@@ -1,0 +1,39 @@
+{{> header }}
+
+{{#count}}
+<h3>Your query returned {{count}} records<br />
+    Choose a record to view</h3>
+<form method="GET" action="results">
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>#</th>
+                {{#labels}} <th>{{label}}</th> {{/labels}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#results}} {{> searchresult }} {{/results}}
+        </tbody>
+        {{> hidden_form }}
+        <tr>
+            <td colspan='15'>
+                {{#prev}}
+                <input type='submit' name='prev_page' value='View previous {{page_size}} summaries' />
+                {{/prev}}
+                {{#next}}
+                <input type='submit' name='next_page' value='View next {{page_size}} summaries' />
+                {{/next}}
+                {{#paging}}
+                <br />OR</br />
+                {{/paging}}
+                <a href="search">Input new search criteria</a>
+            </td>
+        </tr>
+    </table>
+</form>
+{{/count}}
+{{^count}}
+<h3>Your query returned 0 results.</h3>
+{{/count}}
+
+{{> footer }}
