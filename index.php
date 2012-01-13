@@ -3,6 +3,7 @@
 require_once('./alumna.php');
 require_once(ALUMNA_DIR . '/helpers/search.php');
 require_once(ALUMNA_DIR . '/helpers/results.php');
+require_once(ALUMNA_DIR . '/helpers/record.php');
 
 /**
  * ROUTER
@@ -12,9 +13,10 @@ require_once(ALUMNA_DIR . '/helpers/results.php');
 $controller = new AlumnaController();
 
 // Map routes.
-dispatch_get('/', array($controller, 'index'));
-dispatch_get('/search', array($controller, 'search'));
+dispatch_get('/',        array($controller, 'index'));
+dispatch_get('/search',  array($controller, 'search'));
 dispatch_get('/results', array($controller, 'results'));
+dispatch_get('/record',  array($controller, 'record'));
 
 
 /**
@@ -116,7 +118,6 @@ class AlumnaController
      */
     public function index()
     {
-        error_log('CONTROLLER: index');
         $index = $this->render('index', array());
         $this->_close();
         return $index;
@@ -129,7 +130,6 @@ class AlumnaController
      */
     public function search()
     {
-        error_log('CONTROLLER: search');
         $helper = new SearchHelper($this);
         $search = $helper->render();
         $this->_close();
@@ -143,7 +143,6 @@ class AlumnaController
      */
     public function results()
     {
-        error_log('CONTROLLER: results');
         $helper  = new ResultsHelper($this);
         $results = $helper->render();
         $this->_close();
@@ -157,8 +156,10 @@ class AlumnaController
      */
     public function record()
     {
-        error_log('CONTROLLER: record');
-        // ** render.
+        $helper = new RecordHelper($this);
+        $results = $helper->render();
+        $this->_close();
+        return $results;
     }
 
 }

@@ -136,9 +136,28 @@ class ResultsHelper extends BaseHelper
      **/
     public function render()
     {
+        $output = '';
+
         if ($this->_get('rec_num')) {
-            // TODO: delegate to DisplayHelper (or redirect with GET intact).
+            require_once dirname(__FILE__) . '/record.php';
+            $helper = new RecordHelper($this->controller);
+            $output = $helper->render();
+        } else {
+            $output = parent::render();
         }
+
+        return $output;
+    }
+
+    /**
+     * This directly calls the parent render, without checking that rec_num 
+     * is set appropriately.
+     *
+     * @return string
+     * @author Eric Rochester <err8n@virginia.edu>
+     **/
+    protected function _render()
+    {
         return parent::render();
     }
 
@@ -177,12 +196,8 @@ class ResultsHelper extends BaseHelper
         $this->_buildQuery();
         $this->_setPagination($vars);
 
-        $count = $this->_getCount();
+        $count   = $this->_getCount();
         $results = $this->_getSearchResults(($vars['num_page'] - 1) * $this->rows_page);
-
-        $log = fopen('/tmp/results.log', 'w');
-        fwrite($log, print_r($results, true));
-        fclose($log);
 
         $prev = ($vars['num_page'] > 1 && $count > $this->rows_page);
         $next = (
@@ -248,6 +263,28 @@ class ResultsHelper extends BaseHelper
             'field' => $field,
             'value' => $value
         ));
+    }
+
+    /**
+     * This removes a field from the current_form.
+     *
+     * @param $field string The field to remove.
+     *
+     * @return void
+     * @author Eric Rochester <err8n@virginia.edu>
+     **/
+    protected function _delCurrentForm($field)
+    {
+        $i = 0;
+        foreach ($this->current_form as $info) {
+            if ($info['field'] == $field) {
+                break;
+            }
+            $i++;
+        }
+
+        unset($this->current_form[$i]);
+        $this->current_form = array_values($this->current_form);
     }
 
     /**
