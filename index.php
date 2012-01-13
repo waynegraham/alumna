@@ -1,6 +1,7 @@
 <?php
 
 require_once('./alumna.php');
+require_once(ALUMNA_DIR . '/helpers/search.php');
 
 /**
  * ROUTER
@@ -36,6 +37,8 @@ class AlumnaController
 
         $this->mustache = new Mustache(null, null, $partials);
 
+        $this->__db = null;
+
     }
 
     /**
@@ -67,13 +70,28 @@ class AlumnaController
      * @return String
      * @author Eric Rochester <err8n@virginia.edu>
      **/
-    protected function _render($template, $values, $partials=null)
+    public function render($template, $values, $partials=null)
     {
         return $this->mustache->render(
             $this->templates[$template],
             $values, 
             ($partials == null) ? null : $this->_getPartials($partials)
         );
+    }
+
+    /**
+     * This lazily creates and returns a db manager. If one has already been created, it is returned.
+     *
+     * @return DatabaseManager
+     * @author Eric Rochester <err8n@virginia.edu>
+     **/
+    public function db()
+    {
+        if ($this->__db == null) {
+            $config = parse_ini_file(DB_CONFIG_FILE);
+            $this->__db = new DatabaseManager($config);
+        }
+        return $this->__db;
     }
 
     /**
@@ -95,7 +113,8 @@ class AlumnaController
     public function search()
     {
         error_log('CONTROLLER: search');
-        return $this->_render('search', array());
+        $helper = new SearchHelper($this);
+        return $helper->render();
     }
 
     /**
