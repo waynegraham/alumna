@@ -3,7 +3,7 @@
 {{#count}}
 <h3>Your query returned {{count}} records<br />
     Choose a record to view</h3>
-<form method="GET" action="display.php">
+<form method="GET" action="results">
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -26,7 +26,7 @@
                 {{#paging}}
                 <br />OR</br />
                 {{/paging}}
-                <a href="search.php">Input new search criteria</a>
+                <a href="search">Input new search criteria</a>
             </td>
         </tr>
     </table>

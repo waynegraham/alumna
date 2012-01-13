@@ -178,7 +178,7 @@ class ResultsHelper extends BaseHelper
         $this->_setPagination($vars);
 
         $count = $this->_getCount();
-        $results = $this->_getSearchResults();
+        $results = $this->_getSearchResults(($vars['num_page'] - 1) * $this->rows_page);
 
         $log = fopen('/tmp/results.log', 'w');
         fwrite($log, print_r($results, true));
@@ -186,7 +186,7 @@ class ResultsHelper extends BaseHelper
 
         $prev = ($vars['num_page'] > 1 && $count > $this->rows_page);
         $next = (
-            $vars['num_page'] < ($count / $this->rows_page) - 1 &&
+            $vars['num_page'] < ceil($count / $this->rows_page) &&
             $count > $this->rows_page
         );
         $data = array(
@@ -386,10 +386,10 @@ EOQ;
             $vars['num_page'] = 1;
         }
         if ($vars['next_page']) {
-            $vars['num_page']++;
+            $vars['num_page'] = $vars['num_page'] + 1;
         }
         if ($vars['prev_page']) {
-            $vars['prev_page']--;
+            $vars['num_page'] = $vars['num_page'] - 1;
         }
         $this->_addCurrentForm('num_page', $vars['num_page']);
 
@@ -415,10 +415,12 @@ EOQ;
     /**
      * This returns the search results in a form that the template will like.
      *
+     * @params $offset int This is the page offset. It defaults to zero.
+     *
      * @return array
      * @author Eric Rochester <err8n@virginia.edu>
      **/
-    protected function _getSearchResults()
+    protected function _getSearchResults($offset=0)
     {
         $results = array();
 
@@ -436,7 +438,7 @@ EOQ;
                 }
 
                 $meta = array(
-                    'n'      => $n,
+                    'n'      => $n + $offset,
                     'id'     => $row['accessionNumber'],
                     'query'  => $current_query_str,
                     'values' => $values
