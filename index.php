@@ -33,7 +33,7 @@ class AlumnaController
 
         $this->templates = new MustacheLoader(TEMPLATE_DIR);
 
-        $partials  = $this->_getPartials(array('header', 'footer'));
+        $partials  = $this->getPartials(array('header', 'footer'));
 
         $this->mustache = new Mustache(null, null, $partials);
 
@@ -63,10 +63,11 @@ class AlumnaController
      * @return Associative array.
      * @author Eric Rochester <err8n@virginia.edu>
      **/
-    protected function _getPartials($names)
+    public function getPartials($names)
     {
         $partials = array();
         foreach ($names as $name) {
+            error_log("Getting partials for '$name'");
             $partials[$name] = $this->templates[$name];
         }
         return $partials;
@@ -89,7 +90,7 @@ class AlumnaController
         return $this->mustache->render(
             $this->templates[$template],
             $values, 
-            ($partials == null) ? null : $this->_getPartials($partials)
+            ($partials == null) ? null : $this->getPartials($partials)
         );
     }
 
