@@ -2,7 +2,7 @@
 host     = "localhost"
 username = ""
 password = ""
-dbname   = ""
+name     = ""
 prefix   = ""
 charset  = "utf8"
 port     = "3306"
