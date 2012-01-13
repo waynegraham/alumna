@@ -9,14 +9,6 @@ require_once dirname(__FILE__) . '/base.php';
 class SearchHelper extends BaseHelper
 {
 
-    var $_rec_num;
-    var $_rec_num2;
-    var $_remod;
-    var $_submitsearch;
-    var $_next_page;
-    var $_prev_page;
-    var $_num_page;
-    
     function __construct($controller)
     {
         parent::__construct($controller);

@@ -2,6 +2,7 @@
 
 require_once('./alumna.php');
 require_once(ALUMNA_DIR . '/helpers/search.php');
+require_once(ALUMNA_DIR . '/helpers/results.php');
 
 /**
  * ROUTER
@@ -13,7 +14,7 @@ $controller = new AlumnaController();
 // Map routes.
 dispatch_get('/', array($controller, 'index'));
 dispatch_get('/search', array($controller, 'search'));
-// dispatch_post('/search', array($controller, 'results'));
+dispatch_get('/results', array($controller, 'results'));
 
 
 /**
@@ -67,7 +68,6 @@ class AlumnaController
     {
         $partials = array();
         foreach ($names as $name) {
-            error_log("Getting partials for '$name'");
             $partials[$name] = $this->templates[$name];
         }
         return $partials;
@@ -144,7 +144,10 @@ class AlumnaController
     public function results()
     {
         error_log('CONTROLLER: results');
-        // ** render.
+        $helper  = new ResultsHelper($this);
+        $results = $helper->render();
+        $this->_close();
+        return $results;
     }
 
     /**
