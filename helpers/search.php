@@ -1,17 +1,13 @@
 <?php
 
+require_once dirname(__FILE__) . '/base.php';
+
 /**
  * This is a helper for the search page. This is delegated to by the 
  * controller.
  **/
-class SearchHelper {
-
-    /**
-     * This is the primary controller, giving this access to the DB manager and templating.
-     *
-     * @var AlumnaControler
-     **/
-    var $controller;
+class SearchHelper extends BaseHelper
+{
 
     var $_rec_num;
     var $_rec_num2;
@@ -23,50 +19,7 @@ class SearchHelper {
     
     function __construct($controller)
     {
-        $this->controller = $controller;
-    }
-
-    /**
-     * This returns the DB.
-     *
-     * @return DatabaseManager
-     * @author Eric Rochester <err8n@virginia.edu>
-     **/
-    protected function _db()
-    {
-        return $this->controller->db();
-    }
-
-    /**
-     * This returns a GET parameter, or the default.
-     *
-     * @param $var     string The GET parameter to return.
-     * @param $default string The default value to return. This defaults to the 
-     * empty string.
-     *
-     * @return string
-     * @author Eric Rochester <err8n@virginia.edu>
-     **/
-    protected function _get($var, $default='')
-    {
-        return isset($_GET[$var]) ? $_GET[$var] : $default;
-    }
-
-    /**
-     * This returns the series of GET parameters as an associative array.
-     *
-     * @param $vars array This is a list of the GET parameters to return.
-     *
-     * @return array
-     * @author Eric Rochester <err8n@virginia.edu>
-     **/
-    protected function _getArray($vars)
-    {
-        $params = array();
-        foreach ($vars as $var) {
-            $params[$var] = $this->_get($var);
-        }
-        return $params;
+        parent::__construct($controller);
     }
 
     /**
@@ -184,29 +137,37 @@ class SearchHelper {
      * @return array
      * @author Eric Rochester <err8n@virginia.edu>
      **/
-    protected function _makeTemplateData()
+    protected function _getTemplateData()
     {
         $fields = $this->_getFieldInfo();
         return $fields;
     }
 
     /**
-     * This renders the page and returns it as a string.
+     * This returns the base template for this page.
      *
      * @return string
      * @author Eric Rochester <err8n@virginia.edu>
      **/
-    public function render()
+    protected function _getTemplateName()
     {
-        $data     = $this->_makeTemplateData();
-        $partials = array(
+        return 'search';
+    }
+
+    /**
+     * This returns the partials that the search template requires.
+     *
+     * @return array
+     * @author Eric Rochester <err8n@virginia.edu>
+     **/
+    protected function _getPartialNames()
+    {
+        return array(
             'header',
             'footer',
             'queryselect',
             'querytext'
         );
-
-        return $this->controller->render('search', $data, $partials);
     }
 }
 
