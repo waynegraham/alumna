@@ -2,6 +2,8 @@
 
 require_once './alumna.php';
 
+$db = new DatabaseManager($DB_CONFIG_FILE);
+
 $connection=mysql_connect("localhost", "alumnaAdmin", "alumna%adm%orion");
 mysql_select_db("alumna", $connection);
 
