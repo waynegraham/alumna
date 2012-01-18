@@ -6,7 +6,7 @@ require 'capistrano/ext/multistage'
 set :application, "alumna"
 #set :repository,  "https://subversion.lib.virginia.edu/repos/alumna/trunk"
 set :repository, 'git://github.com/waynegraham/alumna.git'
-set :branch, "develop"
+set :branch, "master"
 
 
 set :deploy_to, "/usr/local/projects/#{application}/"
