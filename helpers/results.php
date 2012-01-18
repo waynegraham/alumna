@@ -340,7 +340,7 @@ class ResultsHelper extends BaseHelper
             $i++;
         }
 
-        $query = $this->_buildKeywordQuery($query);
+        $query = $this->_buildKeywordQuery($query, $i);
 
         $this->countq = "SELECT COUNT(*) FROM iph WHERE accessionNumber IN ($query);";
         $this->query  = "SELECT * FROM iph WHERE accessionNumber IN ($query) ORDER BY accessionNumber";
@@ -354,7 +354,7 @@ class ResultsHelper extends BaseHelper
      * @return string
      * @author Eric Rochester <err8n@virginia.edu>
      **/
-    protected function _buildKeywordQuery($query)
+    protected function _buildKeywordQuery($query, $i)
     {
         if (!isset($this->current_query['keyword'])) {
             return $query;
