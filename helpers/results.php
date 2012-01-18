@@ -364,47 +364,41 @@ class ResultsHelper extends BaseHelper
         $keyword = $this->current_query['keyword'];
         $value   = $this->_db()->escape($keyword);
 
-        $query = "($query $op ";
+        $query = "$query $op ";
         $query .= <<<EOQ
                 MATCH (
-                    lastName, firstName, address, city, state, 
-                    zip, phoneNumber, email, canwecontact, contact2, school, 
-                    school2, school3, hometown, homestate, htclassification, 
-                    highschool, coedhighschool, directlyFromHS, ifNotComment, 
-                    activities, married, spouseAtUVA, mothersDegree1, 
-                    mothersSchool1, mothersSchool2, mothersDegree2, 
-                    mothersSchool3, mothersDegree3, fathersDegree1, 
-                    fathersschool1, fathersschool2, fathersdegree2, 
-                    fathersschool3, fathersdegree3, comments10, 
-                    sisterschooling1, sisterschooling2, sisterschooling3, 
-                    brotherschooling1, brotherschooling2, brotherschooling3, 
-                    comments11, familyatuva, mothersoccupation1, 
-                    mothersoccupation2, mothersoccupation3, fathersoccupation1, 
-                    fathersoccupation2, fathersoccupation3, comments13, 
-                    othercollege1, otherconcentration1, otherdegree1, 
-                    otherdate1, othercollege2, otherconcentration2, 
-                    otherdegree2, otherdate2, othercollege3, 
-                    otherconcentration3, otherdegree3, otherdate3, 
-                    othercollege4, otherconcentration4, otherdegree4, 
-                    otherdate4, othercollege5, otherconcentration5, 
-                    otherdegree5, otherdate5, comments14, whychooseuva, 
-                    howfinanceuva, whychooseFOC, classroomexp, 
-                    interactionprofs, greatestimpact, mostremember, 
-                    weekendacts, Xtracurrorgs, issues, interestsexpressed, 
-                    housing, likedislikehousing, commenton27, meals, 
-                    interactinCville, interactdetail, Cvillememory, 
-                    partofUVAcomm, partofcomm, specincidents, vividmems, 
-                    marstatusinfluence, culturalbackgroundinf, 
-                    educationprepared, preparedpostUVA, commentonprepared, 
-                    mostsigeventsince, impactonprofessional, otherfactors, 
-                    position1, dates1, position2, dates2, position3, dates3, 
-                    commentson39, volunteer1, volunteerdates1, volunteer2, 
-                    volunteerdates2, volunteer3, volunteerdates3, commentson40, 
-                    careerwoman, commentson41, workbarriers, commentson42, 
-                    currmarry, agerange, employstatus, commenton46, addcomments
+                    accessionNumber, lastName, firstName, address, city, state, 
+zip, phoneNumber, email, canwecontact, contact2, school, school2, school3, 
+hometown, homestate, htclassification, highschool, coedhighschool, 
+directlyFromHS, ifNotComment, activities, married, spouseAtUVA, mothersDegree1, 
+mothersSchool1, mothersSchool2, mothersDegree2, mothersSchool3, mothersDegree3, 
+fathersDegree1, FathersSchool1, FathersSchool2, FathersDegree2, FathersSchool3, 
+FathersDegree3, Comments10, SisterSchooling1, SisterSchooling2, 
+SisterSchooling3, BrotherSchooling1, BrotherSchooling2, BrotherSchooling3, 
+Comments11, AnyFamilyMembersAtUVa, MothersOccupation1, MothersOccupation2, 
+MothersOccupation3, FathersOccupation1, FathersOccupation2, FathersOccupation3, 
+Comments13, EnteredUVA, LeftUVA, OtherCollege1, OtherConcentration1, 
+OtherDegree1, OtherDate1, OtherCollege2, OtherConcentration2, OtherDegree2, 
+OtherDate2, OtherCollege3, OtherConcentration3, OtherDegree3, OtherDate3, 
+OtherCollege4, OtherConcentration4, OtherDegree4, OtherDate4, OtherCollege5, 
+OtherConcentration5, OtherDegree5, OtherDate5, Comments14, WhydidyouchooseUVa, 
+HowdidYoufinanceUVa, WhydidyouchooseFOC, ClassroomExperience, 
+InteractionwithProfessors, PeoplewithGreatestImpact, WhatdoYouRememberMost, 
+WeekendActivities, ExtraCurricularOrgs, StatelocalNationalIissues, 
+Interestsexpressed, Housing, LikeDislikeHousing, Commentonabove27, Meals, 
+InteractWithPeopleinCville, InteractionDetailed, Cvilleremembered, 
+PartofUVaCommunity, PartofCommunity, Specificincidents, Mostvividmemories, 
+Influenceofmaritalstatus, Influenceofethnicculturalbackground, 
+EducationPrepared, PreparedforpostUValife, Commentonabove, 
+Mostsignificanteventsince, Personalimpactonprofessional, Otherfactors, 
+Position1, Dates1, Position2, Dates2, Position3, Dates3, CommentsonAbove39, 
+Volunteer1, VolunteerDates1, Volunteer2, VolunteerDates2, Volunteer3, 
+VolunteerDates3, CommentsonAbove40, CareerWoman, Commentonabove41, 
+Barriersatwork, Commentonabove42, CurrentMarritalStatus, AgeRange, 
+NumberofChildren, EmploymentStatus, CommentonAbove46, AdditionalComments
                 ) AGAINST (
 EOQ;
-        $query .= "'$value' IN BOOLEAN MODE)) UNION (SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)) ORDER BY accessionNumber";
+        $query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
 
         return $query;
     }
