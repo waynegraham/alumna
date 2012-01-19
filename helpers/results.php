@@ -375,7 +375,7 @@ Comments14,
 Position1, Position2, CommentsonAbove39, 
 Volunteer1, Volunteer2,
 CommentsonAbove40
-                ) AGAINST (
+                ) AGAINST ('$value' IN BOOLEAN MODE);
 EOQ;
         //$query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
 
