@@ -21,6 +21,10 @@ h3 a {
     text-decoration:none;
 }
 
+table {
+  width: 100%;
+}
+
 thead th {
     border: 2px solid rgba(0,0,0,0.1);
     border-width: 2px 0;
