@@ -367,17 +367,17 @@ class ResultsHelper extends BaseHelper
         $query = "$query $op ";
         $query .= <<<EOQ
                 MATCH (
-                     school, school2, school3, 
+                     school, school2,
 hometown, htclassification, highschool,
 MothersOccupation1, MothersOccupation2, 
-FathersOccupation1, FathersOccupation2, FathersOccupation3, 
-Comments14,  
-Position1, Position2, Position3, CommentsonAbove39, 
-Volunteer1, Volunteer2, Volunteer3, 
+FathersOccupation1, FathersOccupation2,  
+Comments14, 
+Position1, Position2, CommentsonAbove39, 
+Volunteer1, Volunteer2,
 CommentsonAbove40
                 ) AGAINST (
 EOQ;
-        $query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
+        //$query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
 
         return $query;
     }
