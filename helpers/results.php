@@ -330,7 +330,7 @@ class ResultsHelper extends BaseHelper
     protected function _buildQuery()
     {
         $db = $this->_db();
-        $query = 'SELECT i.accessionNumber FROM iph i WHERE ';
+        $query = 'SELECT accessionNumber FROM iph WHERE ';
         $i = 0;
 
         foreach ($this->params as $column => $value) {
@@ -342,8 +342,8 @@ class ResultsHelper extends BaseHelper
 
         $query = $this->_buildKeywordQuery($query, $i);
 
-        $this->countq = "SELECT COUNT(i.*) FROM iph i WHERE i.accessionNumber IN ($query);";
-        $this->query  = "SELECT i.* FROM iph i WHERE i.accessionNumber IN ($query) ORDER BY i.accessionNumber";
+        $this->countq = "SELECT COUNT(*) FROM iph WHERE accessionNumber IN ($query);";
+        $this->query  = "SELECT * FROM iph WHERE accessionNumber IN ($query) ORDER BY accessionNumber";
     }
 
     /**
@@ -364,34 +364,21 @@ class ResultsHelper extends BaseHelper
         $keyword = $this->current_query['keyword'];
         $value   = $this->_db()->escape($keyword);
 
-
-        //$query = "$query $op ";
-        // Refactor this query
-        //$query = '';
-        //$query .= <<<EOQ
-                //MATCH (
-                     //school, school2,
-//hometown, htclassification, highschool,
-//MothersOccupation1, MothersOccupation2, 
-//FathersOccupation1, FathersOccupation2,  
-//Comments14, 
-//Position1, Position2, CommentsonAbove39, 
-//Volunteer1, Volunteer2,
-//CommentsonAbove40
-                //) AGAINST (
-//EOQ;
-        //$query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
+        $query = "$query $op ";
         $query .= <<<EOQ
-i.accessionNumber IN (
-  SELECT DISTINCT accessionNumber
-  FROM openresponses
-  WHERE MATCH (response) 
-  AGAINST ('$value' IN BOOLEAN MODE)
-);
+                MATCH (
+                     school, school2,
+hometown, htclassification, highschool,
+MothersOccupation1, MothersOccupation2, 
+FathersOccupation1, FathersOccupation2,  
+Comments14, 
+Position1, Position2, CommentsonAbove39, 
+Volunteer1, Volunteer2,
+CommentsonAbove40
+                ) AGAINST (
 EOQ;
-        //$query .= "'$value' IN BOOLEAN MODE)";
-        //
-        print_r($query);
+        //$query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
+        $query .= "'$value' IN BOOLEAN MODE)";
 
         return $query;
     }
