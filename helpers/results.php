@@ -330,7 +330,7 @@ class ResultsHelper extends BaseHelper
     protected function _buildQuery()
     {
         $db = $this->_db();
-        $query = 'SELECT accessionNumber FROM iph WHERE ';
+        $query = 'SELECT i.accessionNumber FROM iph i WHERE ';
         $i = 0;
 
         foreach ($this->params as $column => $value) {
@@ -365,20 +365,30 @@ class ResultsHelper extends BaseHelper
         $value   = $this->_db()->escape($keyword);
 
         $query = "$query $op ";
-        $query .= <<<EOQ
-                MATCH (
-                     school, school2,
-hometown, htclassification, highschool,
-MothersOccupation1, MothersOccupation2, 
-FathersOccupation1, FathersOccupation2,  
-Comments14, 
-Position1, Position2, CommentsonAbove39, 
-Volunteer1, Volunteer2,
-CommentsonAbove40
-                ) AGAINST (
-EOQ;
+        //$query .= <<<EOQ
+                //MATCH (
+                     //school, school2,
+//hometown, htclassification, highschool,
+//MothersOccupation1, MothersOccupation2, 
+//FathersOccupation1, FathersOccupation2,  
+//Comments14, 
+//Position1, Position2, CommentsonAbove39, 
+//Volunteer1, Volunteer2,
+//CommentsonAbove40
+                //) AGAINST (
+//EOQ;
         //$query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
-        $query .= "'$value' IN BOOLEAN MODE)";
+        $query .= <<<EOQ
+i.accessionNumber IN (
+  SELECT o.accessionNumber 
+  FROM `openresponses` o
+  WHERE MATCH (response)
+
+EOQ;
+        
+        $query .= " AGAINST ('$value' IN BOOLEAN MODE))";
+
+        //print_r($query);
 
         return $query;
     }
