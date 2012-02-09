@@ -364,7 +364,8 @@ class ResultsHelper extends BaseHelper
         $keyword = $this->current_query['keyword'];
         $value   = $this->_db()->escape($keyword);
 
-        $query = "$query $op ";
+        //$query = "$query $op ";
+        $query = ''; // reset query paramenter
         //$query .= <<<EOQ
                 //MATCH (
                      //school, school2,
@@ -379,21 +380,21 @@ class ResultsHelper extends BaseHelper
 //EOQ;
         //$query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
         $query .= <<<EOQ
-i.accessionNumber IN (
-  SELECT o.accessionNumber 
+  SELECT DISTINCT o.accessionNumber 
   FROM `openresponses` o
   WHERE MATCH (response)
 
 EOQ;
-        
-        $query .= " AGAINST ('$value' IN BOOLEAN MODE))";
+
+        $query .= " AGAINST ('$value' IN BOOLEAN MODE)";
 
         //print_r($query);
+
 
         return $query;
     }
 
-    /**
+        /**
      * This sets the pagination.
      *
      * @param $vars array The GET parameters.
