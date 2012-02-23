@@ -97,10 +97,10 @@ class SearchHelper extends BaseHelper
         $fields = array(
             'school'           => $this->_finfo('prog1', 'First UVa school/program'),
             'school2'          => $this->_finfo('prog2', 'Second UVa school/program'),
-            'homestate'        => $this->_finfo('homet', 'Hometown'),
+            'homestate'        => $this->_finfo('homes', 'Home state'),
             'htclassification' => $this->_finfo('htclass', 'Hometown Classification'),
-            'entereduva'       => $this->_finfo('startyear', 'Year started at UVa'),
-            'leftuva'          => $this->_finfo('endyear', 'Year left UVa'),
+            'EnteredUVA'       => $this->_finfo('startyear', 'Year started at UVa'),
+            'LeftUVA'          => $this->_finfo('endyear', 'Year left UVa'),
             'spouseAtUVA'      => $this->_finfo('UVAspouse', 'Spouse at UVa'),
             'highschool'       => $this->_finfo('hsname', 'High school type'),
             'coedhighschool'   => $this->_finfo('coedhs', 'Coed high school'),
