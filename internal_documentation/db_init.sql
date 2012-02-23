@@ -59,6 +59,11 @@ LOAD DATA LOCAL INFILE 'OpenResponses Final.txt'
     IGNORE 1 LINES
     ;
 
+SELECT 'Generating full text indices.';
+ALTER TABLE `alumna`.`openresponses`
+DROP INDEX `openresponses_idx`,
+    ADD FULLTEXT INDEX `openresponses_idx` (`response` ASC);
+
 -- More sanity, such as it is.
 SELECT 'Imported with responses.';
 SELECT COUNT(*) FROM openresponses WHERE response IS NOT NULL;
