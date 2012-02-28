@@ -330,17 +330,23 @@ class ResultsHelper extends BaseHelper
     protected function _buildQuery()
     {
         $db = $this->_db();
-        $query = 'SELECT i.accessionNumber FROM iph i WHERE ';
+        $query = 'SELECT i.accessionNumber FROM iph i ';
         $i = 0;
 
-        foreach ($this->params as $column => $value) {
-            $op = $i > 0 ? 'AND' : '';
-            $value = $db->escape($value);
-            $query .= " $op $column='$value'";
-            $i++;
-        }
+        // HACK ALERT: querying prog1=* is a flag that returns everything in 
+        // the database.
+        if ($this->current_query['prog1'] != '*') {
+            $query .= ' WHERE ';
 
-        $query = $this->_buildKeywordQuery($query, $i);
+            foreach ($this->params as $column => $value) {
+                $op = $i > 0 ? 'AND' : '';
+                $value = $db->escape($value);
+                $query .= " $op $column='$value'";
+                $i++;
+            }
+
+            $query = $this->_buildKeywordQuery($query, $i);
+        }
 
         $this->countq = "SELECT COUNT(*) FROM iph WHERE accessionNumber IN ($query);";
         $this->query  = "SELECT * FROM iph WHERE accessionNumber IN ($query) ORDER BY accessionNumber";
