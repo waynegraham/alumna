@@ -14,21 +14,22 @@
         <tbody>
             {{#results}} {{> searchresult }} {{/results}}
         </tbody>
-        {{> hidden_form }}
-        <tr>
-            <td colspan='15'>
-                {{#prev}}
-                <input type='submit' name='prev_page' value='View previous {{page_size}} summaries' />
-                {{/prev}}
-                {{#next}}
-                <input type='submit' name='next_page' value='View next {{page_size}} summaries' />
-                {{/next}}
-                {{#paging}}
-                <br />OR</br />
-                {{/paging}}
-                <a href="search">Input new search criteria</a>
-            </td>
-        </tr>
+        <tfoot>
+            <tr>
+                <td colspan='15'>
+                    {{#prev}}
+                    <a href="?prev_page=1&{{query_params}}">View previous {{page_size}} summaries</a>
+                    {{/prev}}
+                    {{#next}}
+                    <a href="?next_page=1&{{query_params}}">View next {{page_size}} summaries</a>
+                    {{/next}}
+                    {{#paging}}
+                    <br />OR</br />
+                    {{/paging}}
+                    <a href="search">Input new search criteria</a>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </form>
 {{/count}}

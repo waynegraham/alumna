@@ -21,6 +21,10 @@ h3 a {
     text-decoration:none;
 }
 
+table {
+  width: 100%;
+}
+
 thead th {
     border: 2px solid rgba(0,0,0,0.1);
     border-width: 2px 0;
@@ -28,6 +32,12 @@ thead th {
     font-size:0.75em;
     font-family: Verdana, sans-serif;
     color: rgba(0,0,0,0.5);
+}
+
+tfoot td {
+    border: 2px solid rgba(0,0,0,0.1);
+    border-width: 2px 0;
+    padding: 8px 0;
 }
 
 nav {
@@ -73,5 +83,4 @@ nav#primary-nav {
 
 footer[role="contentinfo"] {
     display:block;
-    border-top: 1px solid rgba(0,0,0,0.2);
 }

@@ -2,12 +2,12 @@
     <td width='60'> {{label}} </td>
     {{#rows}}
     <td{{#colspan}} colspan='{{colspan}}'{{/colspan}}>
-        <textarea name="{{field}}" rows="{{rows}}" cols="{{cols}}">{{value}}</textarea>
+        {{value}}
     </td>
     {{/rows}}
     {{^rows}}
     <td{{#colspan}} colspan='{{colspan}}'{{/colspan}}{{^colspan}} width='60'{{/colspan}}>
-        <input type='text' size='{{textsize}}' name="{{field}}" value="{{value}}" />
+        {{value}}
     </td>
     {{/rows}}
 {{#omega}} </tr> {{/omega}}

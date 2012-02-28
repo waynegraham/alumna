@@ -98,6 +98,13 @@ class ResultsHelper extends BaseHelper
     var $current_form;
 
     /**
+     * The current GET parameters as a flat associative array.
+     *
+     * @var array
+     **/
+    var $current_params;
+
+    /**
      * The query string.
      *
      * @var string
@@ -124,6 +131,7 @@ class ResultsHelper extends BaseHelper
         $this->params          = array();
         $this->current_query   = array();
         $this->current_form    = array();
+        $this->current_params  = array();
         $this->query           = '';
         $this->template_params = array();
     }
@@ -205,14 +213,15 @@ class ResultsHelper extends BaseHelper
             $count > $this->rows_page
         );
         $data = array(
-            'count'     => $count,
-            'results'   => $results,
-            'labels'    => $this->display_labels,
-            'current'   => $this->current_form,
-            'page_size' => $this->rows_page,
-            'prev'      => $prev,
-            'next'      => $next,
-            'paging'    => ($prev || $next)
+            'count'        => $count,
+            'results'      => $results,
+            'labels'       => $this->display_labels,
+            'current'      => $this->current_form,
+            'query_params' => http_build_query($this->current_params),
+            'page_size'    => $this->rows_page,
+            'prev'         => $prev,
+            'next'         => $next,
+            'paging'       => ($prev || $next)
         );
 
         return $data;
@@ -263,6 +272,7 @@ class ResultsHelper extends BaseHelper
             'field' => $field,
             'value' => $value
         ));
+        $this->current_params[$field] = $value;
     }
 
     /**
@@ -330,17 +340,23 @@ class ResultsHelper extends BaseHelper
     protected function _buildQuery()
     {
         $db = $this->_db();
-        $query = 'SELECT accessionNumber FROM iph WHERE ';
+        $query = 'SELECT i.accessionNumber FROM iph i ';
         $i = 0;
 
-        foreach ($this->params as $column => $value) {
-            $op = $i > 0 ? 'AND' : '';
-            $value = $db->escape($value);
-            $query .= " $op $column='$value'";
-            $i++;
-        }
+        // HACK ALERT: querying prog1=* is a flag that returns everything in 
+        // the database.
+        if ($this->current_query['prog1'] != '*') {
+            $query .= ' WHERE ';
 
-        $query = $this->_buildKeywordQuery($query);
+            foreach ($this->params as $column => $value) {
+                $op = $i > 0 ? 'AND' : '';
+                $value = $db->escape($value);
+                $query .= " $op $column='$value'";
+                $i++;
+            }
+
+            $query = $this->_buildKeywordQuery($query, $i);
+        }
 
         $this->countq = "SELECT COUNT(*) FROM iph WHERE accessionNumber IN ($query);";
         $this->query  = "SELECT * FROM iph WHERE accessionNumber IN ($query) ORDER BY accessionNumber";
@@ -354,7 +370,7 @@ class ResultsHelper extends BaseHelper
      * @return string
      * @author Eric Rochester <err8n@virginia.edu>
      **/
-    protected function _buildKeywordQuery($query)
+    protected function _buildKeywordQuery($query, $i)
     {
         if (!isset($this->current_query['keyword'])) {
             return $query;
@@ -364,52 +380,37 @@ class ResultsHelper extends BaseHelper
         $keyword = $this->current_query['keyword'];
         $value   = $this->_db()->escape($keyword);
 
-        $query = "($query $op ";
+        //$query = "$query $op ";
+        $query = ''; // reset query paramenter
+        //$query .= <<<EOQ
+                //MATCH (
+                     //school, school2,
+//hometown, htclassification, highschool,
+//MothersOccupation1, MothersOccupation2, 
+//FathersOccupation1, FathersOccupation2,  
+//Comments14, 
+//Position1, Position2, CommentsonAbove39, 
+//Volunteer1, Volunteer2,
+//CommentsonAbove40
+                //) AGAINST (
+//EOQ;
+        //$query .= "'$value' IN BOOLEAN MODE) UNION SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)";
         $query .= <<<EOQ
-                MATCH (
-                    lastName, firstName, address, city, state, 
-                    zip, phoneNumber, email, canwecontact, contact2, school, 
-                    school2, school3, hometown, homestate, htclassification, 
-                    highschool, coedhighschool, directlyFromHS, ifNotComment, 
-                    activities, married, spouseAtUVA, mothersDegree1, 
-                    mothersSchool1, mothersSchool2, mothersDegree2, 
-                    mothersSchool3, mothersDegree3, fathersDegree1, 
-                    fathersschool1, fathersschool2, fathersdegree2, 
-                    fathersschool3, fathersdegree3, comments10, 
-                    sisterschooling1, sisterschooling2, sisterschooling3, 
-                    brotherschooling1, brotherschooling2, brotherschooling3, 
-                    comments11, familyatuva, mothersoccupation1, 
-                    mothersoccupation2, mothersoccupation3, fathersoccupation1, 
-                    fathersoccupation2, fathersoccupation3, comments13, 
-                    othercollege1, otherconcentration1, otherdegree1, 
-                    otherdate1, othercollege2, otherconcentration2, 
-                    otherdegree2, otherdate2, othercollege3, 
-                    otherconcentration3, otherdegree3, otherdate3, 
-                    othercollege4, otherconcentration4, otherdegree4, 
-                    otherdate4, othercollege5, otherconcentration5, 
-                    otherdegree5, otherdate5, comments14, whychooseuva, 
-                    howfinanceuva, whychooseFOC, classroomexp, 
-                    interactionprofs, greatestimpact, mostremember, 
-                    weekendacts, Xtracurrorgs, issues, interestsexpressed, 
-                    housing, likedislikehousing, commenton27, meals, 
-                    interactinCville, interactdetail, Cvillememory, 
-                    partofUVAcomm, partofcomm, specincidents, vividmems, 
-                    marstatusinfluence, culturalbackgroundinf, 
-                    educationprepared, preparedpostUVA, commentonprepared, 
-                    mostsigeventsince, impactonprofessional, otherfactors, 
-                    position1, dates1, position2, dates2, position3, dates3, 
-                    commentson39, volunteer1, volunteerdates1, volunteer2, 
-                    volunteerdates2, volunteer3, volunteerdates3, commentson40, 
-                    careerwoman, commentson41, workbarriers, commentson42, 
-                    currmarry, agerange, employstatus, commenton46, addcomments
-                ) AGAINST (
+  SELECT DISTINCT o.accessionNumber 
+  FROM `openresponses` o
+  WHERE MATCH (response)
+
 EOQ;
-        $query .= "'$value' IN BOOLEAN MODE)) UNION (SELECT DISTINCT accessionNumber FROM openresponses WHERE MATCH (response) AGAINST ('$value' IN BOOLEAN MODE)) ORDER BY accessionNumber";
+
+        $query .= " AGAINST ('$value' IN BOOLEAN MODE)";
+
+        //print_r($query);
+
 
         return $query;
     }
 
-    /**
+        /**
      * This sets the pagination.
      *
      * @param $vars array The GET parameters.

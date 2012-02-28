@@ -13,10 +13,10 @@
         <tr>
             {{#homestate}}        {{> queryselect }} {{/homestate}}
             {{#htclassification}} {{> queryselect }} {{/htclassification}}
-            {{#entereduva}}       {{> queryselect }} {{/entereduva}}
+            {{#EnteredUVA}}       {{> queryselect }} {{/EnteredUVA}}
         </tr>
         <tr>
-            {{#leftuva}}          {{> queryselect }} {{/leftuva}}
+            {{#LeftUVA}}          {{> queryselect }} {{/LeftUVA}}
             {{#spouseAtUVA}}      {{> queryselect }} {{/spouseAtUVA}}
             {{#highschool}}       {{> queryselect }} {{/highschool}}
         </tr>
@@ -25,7 +25,7 @@
             {{#directlyFromHS}}   {{> queryselect }} {{/directlyFromHS}}
         </tr>
         <tr>
-            <td>Keyword search on all fields*</td>
+            <td>Keyword search on all responses*</td>
             <td colspan='3'><input type='text' name='keyword' size='60' /><td>
             <td></td>
             <td></td>
@@ -52,7 +52,6 @@ match the keyword search and the search criteria for the other categories.<br>
 *Also, this is a boolean search.  It will default to an "or" search.<br>
 That means that if you search on two words, it will return all rows that have <I>either</i> of the two words, not both.<br>
 If you want to do an "and" search, type the + sign before each word.  So, typing "+africa +asia" would search<br>
-for rows where the words "africa" and "asia" both appear somewhere in the row.  The search is not case sensitive.<br>
-For more information on doing a boolean search, click <a href="http://www.mysql.org/doc/refman/4.1/en/fulltext-boolean.html">here</a>.
+for rows where the words "africa" and "asia" both appear somewhere in the row.  The search is not case sensitive.
 
 {{> footer }}
