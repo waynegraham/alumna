@@ -34,6 +34,11 @@ thead th {
     color: rgba(0,0,0,0.5);
 }
 
+tfoot td {
+    border: 2px solid rgba(0,0,0,0.1);
+    border-width: 2px 0;
+}
+
 nav {
     display:block;
     font-family:Verdana, sans-serif;
@@ -77,5 +82,4 @@ nav#primary-nav {
 
 footer[role="contentinfo"] {
     display:block;
-    border-top: 1px solid rgba(0,0,0,0.2);
 }
