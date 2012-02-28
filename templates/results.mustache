@@ -18,10 +18,10 @@
         <tr>
             <td colspan='15'>
                 {{#prev}}
-                <input type='submit' name='prev_page' value='View previous {{page_size}} summaries' />
+                <a href="?prev_page=1&{{query_params}}">View previous {{page_size}} summaries</a>
                 {{/prev}}
                 {{#next}}
-                <input type='submit' name='next_page' value='View next {{page_size}} summaries' />
+                <a href="?next_page=1&{{query_params}}">View previous {{page_size}} summaries</a>
                 {{/next}}
                 {{#paging}}
                 <br />OR</br />

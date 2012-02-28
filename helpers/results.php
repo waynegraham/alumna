@@ -98,6 +98,13 @@ class ResultsHelper extends BaseHelper
     var $current_form;
 
     /**
+     * The current GET parameters as a flat associative array.
+     *
+     * @var array
+     **/
+    var $current_params;
+
+    /**
      * The query string.
      *
      * @var string
@@ -124,6 +131,7 @@ class ResultsHelper extends BaseHelper
         $this->params          = array();
         $this->current_query   = array();
         $this->current_form    = array();
+        $this->current_params  = array();
         $this->query           = '';
         $this->template_params = array();
     }
@@ -205,14 +213,15 @@ class ResultsHelper extends BaseHelper
             $count > $this->rows_page
         );
         $data = array(
-            'count'     => $count,
-            'results'   => $results,
-            'labels'    => $this->display_labels,
-            'current'   => $this->current_form,
-            'page_size' => $this->rows_page,
-            'prev'      => $prev,
-            'next'      => $next,
-            'paging'    => ($prev || $next)
+            'count'        => $count,
+            'results'      => $results,
+            'labels'       => $this->display_labels,
+            'current'      => $this->current_form,
+            'query_params' => http_build_query($this->current_params),
+            'page_size'    => $this->rows_page,
+            'prev'         => $prev,
+            'next'         => $next,
+            'paging'       => ($prev || $next)
         );
 
         return $data;
@@ -263,6 +272,7 @@ class ResultsHelper extends BaseHelper
             'field' => $field,
             'value' => $value
         ));
+        $this->current_params[$field] = $value;
     }
 
     /**
