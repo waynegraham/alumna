@@ -25,6 +25,17 @@
             {{#directlyFromHS}}   {{> queryselect }} {{/directlyFromHS}}
         </tr>
         <tr>
+            <td colspan='6'></td>
+        </tr>
+        <tr>
+            <td colspan='6'>
+                <center>
+                    <input type='submit' name='submitsearch' value='Search' />
+                    <input type='reset' name='reset button' value='Reset search criteria' />
+                </center>
+            </td>
+        </tr>
+        <tr>
             <td colspan="6">
             <div id="cse" style="width: 100%;">Loading</div>
             <script src="http://www.google.com/jsapi" type="text/javascript"></script>
@@ -37,20 +48,10 @@
                 customSearchControl.draw('cse');
               }, true);
             </script>
-<link rel="stylesheet" href="http://www.google.com/cse/style/look/default.css" type="text/css" />
+            <link rel="stylesheet" href="http://www.google.com/cse/style/look/default.css" type="text/css" />
             </td>
         </tr>
-        <tr>
-            <td colspan='6'></td>
-        </tr>
-        <tr>
-            <td colspan='6'>
-                <center>
-                    <input type='submit' name='submitsearch' value='Search' />
-                    <input type='reset' name='reset button' value='Reset search criteria' />
-                </center>
-            </td>
-        </tr>
+
     </table>
 
 </form>
